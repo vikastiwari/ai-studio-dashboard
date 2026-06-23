@@ -333,12 +333,12 @@ export const useStore = create((set, get) => ({
       
       let newLogs = [...prevState.logs];
       if (newProgress < 20 && stage.status === 'pending') {
-         newLogs.push({ timestamp: Date.now(), type: 'INFO', text: `Executing stage: ${stage.name}` });
+         newLogs.push({ timestamp: Date.now(), type: 'INFO', text: `Executing stage: ${stage.title}` });
       }
 
       if (newProgress >= 100) {
         newProgress = 100;
-        newLogs.push({ timestamp: Date.now(), type: 'INFO', text: `Completed stage: ${stage.name}` });
+        newLogs.push({ timestamp: Date.now(), type: 'INFO', text: `Completed stage: ${stage.title}` });
       }
 
       const updatedStages = [...prevState.stages];

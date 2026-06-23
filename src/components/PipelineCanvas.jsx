@@ -21,7 +21,8 @@ const CustomNode = ({ data }) => {
       alignItems: 'center',
       gap: '12px',
       minWidth: '220px',
-      boxShadow: isActive ? '0 0 15px rgba(0, 240, 255, 0.3)' : 'none',
+      boxShadow: isActive ? '0 0 25px var(--accent-cyan), inset 0 0 10px var(--accent-cyan)' : 'none',
+      border: isActive ? '1px solid var(--accent-cyan)' : '1px solid var(--border-subtle)',
       transition: 'all 0.3s ease',
       backdropFilter: 'blur(10px)',
       position: 'relative'
@@ -37,8 +38,8 @@ const CustomNode = ({ data }) => {
       </div>
       <div style={{ flex: 1 }}>
         <div style={{ fontSize: '0.85rem', fontWeight: 'bold' }}>{data.label}</div>
-        <div style={{ fontSize: '0.7rem', color: statusColor }}>
-          {isActive ? 'Processing...' : isComplete ? 'Done' : 'Waiting'}
+        <div style={{ fontSize: '0.7rem', color: statusColor, textTransform: 'uppercase', letterSpacing: '1px' }}>
+          {isActive ? 'Executing...' : isComplete ? 'Done' : 'Waiting'}
         </div>
       </div>
       {isActive && (
