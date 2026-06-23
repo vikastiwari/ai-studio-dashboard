@@ -5,8 +5,8 @@ import { Bot, Video, Mic, PenTool, LayoutTemplate, ZoomIn, ZoomOut, Maximize, Mo
 import { useSonicFeedback } from '../hooks/useSonicFeedback';
 
 const CustomNode = ({ data }) => {
+  const isActive = data.status === 'active' || data.status === 'running';
   const isComplete = data.status === 'complete';
-  const isActive = data.status === 'active';
 
   const statusColor = isActive ? 'var(--accent-cyan)' : isComplete ? 'var(--accent-magenta)' : '#a0a0b0';
 
@@ -22,7 +22,6 @@ const CustomNode = ({ data }) => {
       gap: '12px',
       minWidth: '220px',
       boxShadow: isActive ? '0 0 25px var(--accent-cyan), inset 0 0 10px var(--accent-cyan)' : 'none',
-      border: isActive ? '1px solid var(--accent-cyan)' : '1px solid var(--border-subtle)',
       transition: 'all 0.3s ease',
       backdropFilter: 'blur(10px)',
       position: 'relative'
@@ -119,7 +118,7 @@ const PipelineCanvas = ({ stages }) => {
   const edges = useMemo(() => {
     const edgeList = [];
     for (let i = 0; i < stages.length - 1; i++) {
-      const sourceActive = stages[i].status === 'active' || stages[i].status === 'complete';
+      const sourceActive = stages[i].status === 'active' || stages[i].status === 'running' || stages[i].status === 'complete';
       const isAnimating = sourceActive && stages[i+1].status !== 'complete';
       
       edgeList.push({
