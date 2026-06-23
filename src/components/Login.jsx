@@ -45,7 +45,7 @@ const Login = () => {
           transition={{ type: 'spring', delay: 0.2 }}
           style={{ marginBottom: '2rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
         >
-          <img src="/logo.png" alt="Logo" style={{ width: '64px', height: '64px', borderRadius: '12px', boxShadow: '0 0 20px var(--accent-cyan)', marginBottom: '1rem' }} />
+          <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Logo" style={{ width: '64px', height: '64px', borderRadius: '12px', boxShadow: '0 0 20px var(--accent-cyan)', marginBottom: '1rem' }} />
           <h1 className="gradient-text" style={{ fontSize: '1.8rem', textAlign: 'center' }}>Autonomous AI Studio</h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '0.5rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Authorized Personnel Only</p>
         </motion.div>

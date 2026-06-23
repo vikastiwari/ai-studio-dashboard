@@ -272,7 +272,7 @@ export const useStore = create((set, get) => ({
             ...prevState,
             isRunning: true,
             stages: config.stages.map(stage => ({ ...stage, status: 'pending', progress: 0 })),
-            logs: [{ timestamp: Date.now(), level: 'info', message: '[SIMULATION MODE] Agent Pipeline Initialized' }],
+            logs: [{ timestamp: Date.now(), type: 'INFO', text: '[SIMULATION MODE] Agent Pipeline Initialized' }],
             vramUsage: 10
           }
         }
@@ -321,7 +321,7 @@ export const useStore = create((set, get) => ({
               ...prevState,
               isRunning: false,
               vramUsage: 10,
-              logs: [...prevState.logs, { timestamp: Date.now(), level: 'success', message: '[SIMULATION MODE] Pipeline execution complete.' }]
+              logs: [...prevState.logs, { timestamp: Date.now(), type: 'INFO', text: '[SIMULATION MODE] Pipeline execution complete.' }]
             }
           }
         }));
@@ -333,12 +333,12 @@ export const useStore = create((set, get) => ({
       
       let newLogs = [...prevState.logs];
       if (newProgress < 20 && stage.status === 'pending') {
-         newLogs.push({ timestamp: Date.now(), level: 'info', message: `Executing stage: ${stage.name}` });
+         newLogs.push({ timestamp: Date.now(), type: 'INFO', text: `Executing stage: ${stage.name}` });
       }
 
       if (newProgress >= 100) {
         newProgress = 100;
-        newLogs.push({ timestamp: Date.now(), level: 'info', message: `Completed stage: ${stage.name}` });
+        newLogs.push({ timestamp: Date.now(), type: 'INFO', text: `Completed stage: ${stage.name}` });
       }
 
       const updatedStages = [...prevState.stages];

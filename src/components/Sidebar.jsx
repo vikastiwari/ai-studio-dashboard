@@ -60,7 +60,7 @@ const Sidebar = ({ channels, activeChannel, setActiveChannel, onOpenWizard, isMo
     <aside className={`sidebar ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
       <div style={{ padding: '1.5rem', borderBottom: '1px solid var(--border-subtle)' }}>
         <h2 className="gradient-text" style={{ fontSize: '1.25rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <img src="/logo.png" alt="Logo" style={{ width: '32px', height: '32px', borderRadius: '6px', boxShadow: '0 0 12px var(--accent-cyan)' }} />
+          <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Logo" style={{ width: '32px', height: '32px', borderRadius: '6px', boxShadow: '0 0 12px var(--accent-cyan)' }} />
           Autonomous AI Studio
         </h2>
         <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px', textTransform: 'uppercase', letterSpacing: '1px' }}>

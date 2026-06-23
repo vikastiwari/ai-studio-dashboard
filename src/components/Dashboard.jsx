@@ -56,25 +56,25 @@ const Dashboard = ({ activeTab, channelState }) => {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
         <TiltCard className="glass-panel glitch-hover" style={{ padding: '2rem' }}>
           <h2 style={{ fontSize: '1.2rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Activity size={20} color="var(--accent-cyan)" /> Live Market Price
+            <Activity size={20} color="var(--accent-cyan)" /> API Gateway Latency
           </h2>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '150px' }}>
             <div style={{ fontSize: '4rem', fontWeight: 'bold', color: 'var(--accent-cyan)' }}>
-              ${hftTelemetry.price.toFixed(2)}
+              {Math.floor(hftTelemetry.price / 3)} ms
             </div>
           </div>
         </TiltCard>
 
         <TiltCard className="glass-panel glitch-hover" style={{ padding: '2rem' }}>
           <h2 style={{ fontSize: '1.2rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Cpu size={20} color={hftTelemetry.action > 0 ? "var(--accent-cyan)" : "var(--accent-magenta)"} /> Alpha Agent Action
+            <Cpu size={20} color={hftTelemetry.action > 0 ? "var(--accent-cyan)" : "var(--accent-magenta)"} /> Active Tokens / Sec
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '150px' }}>
             <div style={{ fontSize: '3rem', fontWeight: 'bold', color: hftTelemetry.action > 0 ? "var(--accent-cyan)" : "var(--accent-magenta)" }}>
-              {hftTelemetry.action > 0.5 ? 'BUY' : hftTelemetry.action < -0.5 ? 'SELL' : 'HOLD'}
+              {hftTelemetry.action > 0.5 ? '2.4k' : hftTelemetry.action < -0.5 ? '1.8k' : '3.1k'}
             </div>
             <div style={{ fontSize: '1rem', color: 'var(--text-muted)' }}>
-              Signal Strength: {hftTelemetry.action.toFixed(3)}
+              Throughput Status: {hftTelemetry.action > 0.5 ? 'Optimal' : 'Surging'}
             </div>
           </div>
         </TiltCard>

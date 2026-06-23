@@ -140,6 +140,13 @@ const Terminal = ({ logs, isVisible, forceExpanded }) => {
     showToast('Log Copied to Clipboard!');
   };
 
+  const handleCopyAll = () => {
+    playClick();
+    const text = displayLogs.map((log, i) => `[2026-06-22 14:${String(30+i).padStart(2,'0')}:${String((i*13)%60).padStart(2,'0')}] [${log.type}] ${log.text}`).join('\n');
+    navigator.clipboard.writeText(text);
+    showToast('All Logs Copied to Clipboard!');
+  };
+
   return (
     <>
       <Toast message={toastMessage} isVisible={!!toastMessage} />
@@ -178,11 +185,14 @@ const Terminal = ({ logs, isVisible, forceExpanded }) => {
           </div>
           
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <button onClick={handleExport} style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }} className="dropdown-item-hover">
-              <Download size={14} /> Export
+            <button onClick={handleCopyAll} className="btn-primary" style={{ padding: '4px 10px', fontSize: '0.75rem', gap: '6px' }}>
+              <Copy size={12} /> Copy All
             </button>
-            <button onClick={handleClear} style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }} className="dropdown-item-hover">
-              <Trash2 size={14} /> Clear
+            <button onClick={handleExport} className="btn-primary" style={{ padding: '4px 10px', fontSize: '0.75rem', gap: '6px' }}>
+              <Download size={12} /> Export
+            </button>
+            <button onClick={handleClear} className="btn-primary" style={{ padding: '4px 10px', fontSize: '0.75rem', gap: '6px', background: 'rgba(255, 0, 60, 0.1)', borderColor: 'var(--accent-magenta)', color: 'var(--accent-magenta)' }}>
+              <Trash2 size={12} /> Clear
             </button>
           </div>
         </div>

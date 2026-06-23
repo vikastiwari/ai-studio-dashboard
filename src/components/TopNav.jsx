@@ -48,9 +48,10 @@ const TopNav = ({ onOpenCommandPalette, onOpenModal }) => {
       
       const targetResponse = responses[Math.floor(Math.random() * responses.length)];
       
-      let i = 0;
+      setGeminiResponse(targetResponse.charAt(0));
+      let i = 1;
       const interval = setInterval(() => {
-        setGeminiResponse(prev => prev + targetResponse.charAt(i));
+        setGeminiResponse(prev => targetResponse.substring(0, i + 1));
         i++;
         if (i >= targetResponse.length) {
           clearInterval(interval);
