@@ -46,6 +46,8 @@ export const useStore = create((set, get) => ({
   isMobileMenuOpen: false,
   isAuthenticated: localStorage.getItem('isAuthenticated') === 'true',
   toasts: [],
+  hftInterval: null,
+  activeSimulations: {},
 
   addToast: (message, type = 'info') => {
     const id = Date.now() + Math.random();
@@ -220,10 +222,24 @@ export const useStore = create((set, get) => ({
     };
 
     hftWs.onclose = () => {
-      console.log('Disconnected from HFT Telemetry Server');
+      console.log('Disconnected from HFT Telemetry Server. Falling back to local simulation.');
       set({ isHftConnected: false });
       hftWs = null;
-      setTimeout(() => get().connectHftWebSocket(), 3000);
+      
+      // Start local simulation if not running
+      if (!get().hftInterval) {
+        const interval = setInterval(() => {
+          set((state) => ({
+            hftTelemetry: {
+              price: Math.max(100, state.hftTelemetry.price + (Math.random() - 0.5) * 5),
+              action: Math.floor(Math.random() * 3) // 0=hold, 1=buy, 2=sell
+            }
+          }));
+        }, 200);
+        set({ hftInterval: interval });
+      }
+      
+      setTimeout(() => get().connectHftWebSocket(), 10000);
     };
   },
 
@@ -235,7 +251,117 @@ export const useStore = create((set, get) => ({
         payload: { channelId }
       }));
     } else {
-      console.warn('Cannot start render. WebSocket not connected.');
+      console.warn('WebSocket not connected. Falling back to Local Simulation Mode.');
+      get().simulateLocalPipeline(channelId);
     }
+  },
+
+  simulateLocalPipeline: (channelId) => {
+    const state = get();
+    if (state.activeSimulations[channelId]) return; // Already running
+
+    // 1. Mark Pipeline as Started
+    set((s) => {
+      const prevState = s.channelStates[channelId] || {};
+      const config = pipelineConfigs[channelId] || pipelineConfigs.default;
+      return {
+        activeSimulations: { ...s.activeSimulations, [channelId]: true },
+        channelStates: {
+          ...s.channelStates,
+          [channelId]: {
+            ...prevState,
+            isRunning: true,
+            stages: config.stages.map(stage => ({ ...stage, status: 'pending', progress: 0 })),
+            logs: [{ timestamp: Date.now(), level: 'info', message: '[SIMULATION MODE] Agent Pipeline Initialized' }],
+            vramUsage: 10
+          }
+        }
+      };
+    });
+
+    const config = pipelineConfigs[channelId] || pipelineConfigs.default;
+    let currentStageIndex = 0;
+    
+    // Telemetry Loop
+    const telemetryInterval = setInterval(() => {
+      set((s) => {
+        const prevState = s.channelStates[channelId];
+        if (!prevState || !prevState.isRunning) return s;
+        return {
+          channelStates: {
+            ...s.channelStates,
+            [channelId]: {
+              ...prevState,
+              vramUsage: Math.min(100, Math.max(10, prevState.vramUsage + (Math.random() - 0.5) * 20))
+            }
+          }
+        };
+      });
+    }, 500);
+
+    // Progression Loop
+    const progressionInterval = setInterval(() => {
+      const s = get();
+      const prevState = s.channelStates[channelId];
+      if (!prevState || !prevState.isRunning) {
+        clearInterval(progressionInterval);
+        clearInterval(telemetryInterval);
+        return;
+      }
+
+      if (currentStageIndex >= config.stages.length) {
+        // Complete
+        clearInterval(progressionInterval);
+        clearInterval(telemetryInterval);
+        set((state) => ({
+          activeSimulations: { ...state.activeSimulations, [channelId]: false },
+          channelStates: {
+            ...state.channelStates,
+            [channelId]: {
+              ...prevState,
+              isRunning: false,
+              vramUsage: 10,
+              logs: [...prevState.logs, { timestamp: Date.now(), level: 'success', message: '[SIMULATION MODE] Pipeline execution complete.' }]
+            }
+          }
+        }));
+        return;
+      }
+
+      const stage = prevState.stages[currentStageIndex];
+      let newProgress = stage.progress + Math.floor(Math.random() * 15) + 5;
+      
+      let newLogs = [...prevState.logs];
+      if (newProgress < 20 && stage.status === 'pending') {
+         newLogs.push({ timestamp: Date.now(), level: 'info', message: `Executing stage: ${stage.name}` });
+      }
+
+      if (newProgress >= 100) {
+        newProgress = 100;
+        newLogs.push({ timestamp: Date.now(), level: 'info', message: `Completed stage: ${stage.name}` });
+      }
+
+      const updatedStages = [...prevState.stages];
+      updatedStages[currentStageIndex] = {
+        ...stage,
+        progress: newProgress,
+        status: newProgress === 100 ? 'complete' : 'running'
+      };
+
+      set((state) => ({
+        channelStates: {
+          ...state.channelStates,
+          [channelId]: {
+            ...prevState,
+            stages: updatedStages,
+            logs: newLogs
+          }
+        }
+      }));
+
+      if (newProgress === 100) {
+        currentStageIndex++;
+      }
+    }, 400);
   }
 }));

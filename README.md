@@ -1,6 +1,6 @@
 # Autonomous AI Studio 🧠🚀
 
-Welcome to the **Autonomous AI Studio** dashboard! This is a state-of-the-art, "God-Tier" mission control center designed to monitor, orchestrate, and visualize high-performance AI agent pipelines. It tracks LangGraph state execution, GPU telemetry, and financial projections in real time.
+Welcome to the **Autonomous AI Studio** dashboard! This is a state-of-the-art, enterprise-grade mission control center designed to monitor, orchestrate, and visualize high-performance AI agent pipelines. It tracks LangGraph state execution, GPU telemetry, and financial projections in real time.
 
 For a comprehensive look at the system design, architecture, state management, and real-time data flows, please see the [Architecture Document](docs/ARCHITECTURE.md).
 
@@ -49,27 +49,46 @@ Built with an unparalleled focus on interactivity and a cyberpunk-inspired glass
 - **Icons**: Lucide React
 - **Audio**: Native Web Audio API
 
-## 🚦 Installation & Setup
+## 🚦 Execution Modes & Local Setup
+
+The AI Studio Dashboard is built to run anywhere. It features two execution modes:
+
+### 🌍 Live Interactive Demo (Simulation Mode)
+Experience the dashboard instantly without compiling any code: **[https://vikastiwari.github.io/ai-studio-dashboard](https://vikastiwari.github.io/ai-studio-dashboard)**
+
+*(Note: The live demo runs in a **Client-Side Simulation Mode**. Because static hosts like GitHub Pages do not run the Node.js WebSocket backend, the dashboard seamlessly falls back to an internal Javascript engine to accurately simulate real-time telemetry, pipeline progress, and LangGraph execution logs.)*
+
+### Mode 2: Local WebSocket Server (Full Backend Mock)
+If you want to run the dashboard locally to test the authentic WebSocket data flow, you must run both the Vite UI and the Node.js Mock Server.
 
 Before you begin, ensure you have **Node.js** (v18+) installed.
 
-### 1. Clone the Repository
+#### 1. Clone the Repository
 ```bash
 git clone <repository-url>
 cd ai-studio-dashboard
 ```
 
-### 2. Install Dependencies
+#### 2. Install Dependencies
 ```bash
 npm install
 ```
 
-### 3. Start the Development Server
+#### 3. Start the Local WebSocket Backend
+In your first terminal, launch the mock data orchestrator:
+```bash
+npm run mock
+```
+
+#### 4. Start the Vite UI Server
+In a second terminal, launch the frontend:
 ```bash
 npm run dev
 ```
 
 Open your browser and navigate to the Local URL provided in your terminal (usually `http://localhost:5173`).
+
+
 
 ---
 
